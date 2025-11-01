@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\J\\Desktop\\Repo_foinal\\proyecto_final-\\ApiAuthJWT\\ApiAuthJWT.csproj": {}
+    "C:\\Users\\J\\Desktop\\SistemaFinal\\ApiAuthJWT\\ApiAuthJWT.csproj": {}
   },
   "projects": {
-    "C:\\Users\\J\\Desktop\\Repo_foinal\\proyecto_final-\\ApiAuthJWT\\ApiAuthJWT.csproj": {
+    "C:\\Users\\J\\Desktop\\SistemaFinal\\ApiAuthJWT\\ApiAuthJWT.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\J\\Desktop\\Repo_foinal\\proyecto_final-\\ApiAuthJWT\\ApiAuthJWT.csproj",
+        "projectUniqueName": "C:\\Users\\J\\Desktop\\SistemaFinal\\ApiAuthJWT\\ApiAuthJWT.csproj",
         "projectName": "ApiAuthJWT",
-        "projectPath": "C:\\Users\\J\\Desktop\\Repo_foinal\\proyecto_final-\\ApiAuthJWT\\ApiAuthJWT.csproj",
+        "projectPath": "C:\\Users\\J\\Desktop\\SistemaFinal\\ApiAuthJWT\\ApiAuthJWT.csproj",
         "packagesPath": "C:\\Users\\J\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\J\\Desktop\\Repo_foinal\\proyecto_final-\\ApiAuthJWT\\obj\\",
+        "outputPath": "C:\\Users\\J\\Desktop\\SistemaFinal\\ApiAuthJWT\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\J\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -52,9 +52,19 @@
               "target": "Package",
               "version": "[9.0.10, )"
             },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[9.5.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.2, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ApiAuthJWT.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,9 +20,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowJSP", policy =>
     {
-        policy.WithOrigins("http://localhost:8080") // JSP corre en Tomcat
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+            "http://localhost:8080",
+            "http://3.215.176.47:8080" // IP pública del servidor Tomcat
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
@@ -57,7 +62,7 @@ builder.Services.AddSwaggerGen(c =>
 // ================================
 // 🔹 4️⃣ JWT CONFIG
 // ================================
-var key = Encoding.UTF8.GetBytes("CLAVE_SUPER_SECRETA_JWT_123456"); // cambia esto
+var key = Encoding.UTF8.GetBytes("CLAVE_SUPER_SECRETA_JWT_123456"); // cámbiala en producción
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -79,35 +84,39 @@ builder.Services.AddAuthentication(opt =>
 });
 
 // ================================
-// 🔹 5️⃣ CONSTRUIR APLICACIÓN
+// 🔹 5️⃣ CONEXIÓN A BASE DE DATOS (MySQL)
+// ================================
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    )
+);
+
+// ================================
+// 🔹 6️⃣ CONSTRUIR APLICACIÓN
 // ================================
 var app = builder.Build();
 
 // ================================
-// 🔹 6️⃣ MIDDLEWARES
+// 🔹 7️⃣ MIDDLEWARES
 // ================================
-// ❌ Quitamos redirección a HTTPS (causa warning)
- // app.UseHttpsRedirection();
-
 app.UseCors("AllowJSP");
 app.UseAuthentication();
 app.UseAuthorization();
 
 // ================================
-// 🔹 7️⃣ SWAGGER UI
+// 🔹 8️⃣ SWAGGER UI (siempre disponible)
 // ================================
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // ================================
-// 🔹 8️⃣ MAPEO DE CONTROLADORES
+// 🔹 9️⃣ MAPEO DE CONTROLADORES
 // ================================
 app.MapControllers();
 
 // ================================
-// 🔹 9️⃣ INICIAR SERVIDOR
+// 🔹 🔟 INICIAR SERVIDOR
 // ================================
 app.Run();
