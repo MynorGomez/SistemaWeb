@@ -1,0 +1,293 @@
+package modelo;
+
+import java.sql.*;
+import utils.ConexionDB;
+
+public class VentaDetalle {
+
+    private int id;
+
+    private int id_venta;import utils.ConexionDB;
+
+    private int id_producto;
+
+    private int cantidad;public class VentaDetalle {
+
+    private double precio_unitario;
+
+    private double subtotal;public class VentaDetalle {    private int id_detalle;
+
+    
+
+    private ConexionDB cn;    private int id;    private int id_venta;
+
+
+
+    public VentaDetalle() {    private int id_venta;    private int id_producto;
+
+        this.cn = new ConexionDB();
+
+    }    private int id_producto;    private int cantidad;
+
+
+
+    public int getId() { return id; }    private int cantidad;    private double precio_unitario;
+
+    public void setId(int id) { this.id = id; }
+
+    public int getId_venta() { return id_venta; }    private double precio_unitario;    private double subtotal;
+
+    public void setId_venta(int id_venta) { this.id_venta = id_venta; }
+
+    public int getId_producto() { return id_producto; }    private double subtotal;
+
+    public void setId_producto(int id_producto) { 
+
+        this.id_producto = id_producto;        ConexionDB cn = new ConexionDB();
+
+        // Al establecer el producto, obtenemos su precio actual
+
+        this.precio_unitario = obtenerPrecioProducto(id_producto);    private ConexionDB cn;
+
+    }
+
+    public int getCantidad() { return cantidad; }    public boolean agregar() {
+
+    public void setCantidad(int cantidad) { 
+
+        this.cantidad = cantidad;    public VentaDetalle() {        String sql = "INSERT INTO ventas_detalle (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
+
+        this.subtotal = this.cantidad * this.precio_unitario;
+
+    }        this.cn = new ConexionDB();        try (Connection con = cn.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+    public double getPrecio_unitario() { return precio_unitario; }
+
+    public void setPrecio_unitario(double precio_unitario) { this.precio_unitario = precio_unitario; }    }            ps.setInt(1, id_venta);
+
+    public double getSubtotal() { return subtotal; }
+
+    public void setSubtotal(double subtotal) { this.subtotal = subtotal; }            ps.setInt(2, id_producto);
+
+    
+
+    private double obtenerPrecioProducto(int idProducto) {    public int getId() {            ps.setInt(3, cantidad);
+
+        String query = "SELECT precio_venta FROM productos WHERE id_producto = ?";
+
+        try {        return id;            ps.setDouble(4, precio_unitario);
+
+            cn.abrirConexion();
+
+            cn.setPreparedStatement(cn.getConexion().prepareStatement(query));    }            ps.setDouble(5, subtotal);
+
+            cn.getPreparedStatement().setInt(1, idProducto);
+
+            ResultSet rs = cn.getPreparedStatement().executeQuery();            ps.executeUpdate();
+
+            double precio = 0;
+
+            if (rs.next()) {    public void setId(int id) {            return true;
+
+                precio = rs.getDouble("precio_venta");
+
+            }        this.id = id;        } catch (SQLException e) {
+
+            cn.cerrarConexion();
+
+            return precio;    }            System.out.println("❌ Error al agregar detalle: " + e.getMessage());
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al obtener precio del producto: " + e.getMessage());            return false;
+
+            return 0;
+
+        }    public int getId_venta() {        }
+
+    }
+
+        return id_venta;    }
+
+    public boolean existe(int idVenta, int idProducto) {
+
+        String query = "SELECT COUNT(*) as count FROM ventas_detalle WHERE id_venta = ? AND id_producto = ?";    }
+
+        try {
+
+            cn.abrirConexion();    // Getters y setters
+
+            cn.setPreparedStatement(cn.getConexion().prepareStatement(query));
+
+            cn.getPreparedStatement().setInt(1, idVenta);    public void setId_venta(int id_venta) {    public void setId_venta(int id) { this.id_venta = id; }
+
+            cn.getPreparedStatement().setInt(2, idProducto);
+
+            ResultSet rs = cn.getPreparedStatement().executeQuery();        this.id_venta = id_venta;    public void setId_producto(int id) { this.id_producto = id; }
+
+            rs.next();
+
+            boolean existe = rs.getInt("count") > 0;    }    public void setCantidad(int c) { this.cantidad = c; }
+
+            cn.cerrarConexion();
+
+            return existe;    public void setPrecio_unitario(double p) { this.precio_unitario = p; }
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al verificar existencia del detalle: " + e.getMessage());    public int getId_producto() {    public void setSubtotal(double s) { this.subtotal = s; }
+
+            return false;
+
+        }        return id_producto;
+
+    }
+
+    }    public int getId_detalle() {
+
+    public boolean actualizarCantidad(int idVenta, int idProducto, int cantidadAdicional) {
+
+        String query = "UPDATE ventas_detalle SET cantidad = cantidad + ?, subtotal = (cantidad + ?) * precio_unitario " +        return id_detalle;
+
+                      "WHERE id_venta = ? AND id_producto = ?";
+
+        try {    public void setId_producto(int id_producto) {    }
+
+            cn.abrirConexion();
+
+            cn.setPreparedStatement(cn.getConexion().prepareStatement(query));        this.id_producto = id_producto;
+
+            cn.getPreparedStatement().setInt(1, cantidadAdicional);
+
+            cn.getPreparedStatement().setInt(2, cantidadAdicional);    }    public int getId_venta() {
+
+            cn.getPreparedStatement().setInt(3, idVenta);
+
+            cn.getPreparedStatement().setInt(4, idProducto);        return id_venta;
+
+            int resultado = cn.getPreparedStatement().executeUpdate();
+
+            cn.cerrarConexion();    public int getCantidad() {    }
+
+            return resultado == 1;
+
+        } catch (SQLException e) {        return cantidad;
+
+            System.out.println("Error al actualizar cantidad del detalle: " + e.getMessage());
+
+            return false;    }    public int getId_producto() {
+
+        }
+
+    }        return id_producto;
+
+    
+
+    public boolean agregar() {    public void setCantidad(int cantidad) {    }
+
+        String query = "INSERT INTO ventas_detalle (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
+
+        try {        this.cantidad = cantidad;
+
+            cn.abrirConexion();
+
+            cn.setPreparedStatement(cn.getConexion().prepareStatement(query));    }    public int getCantidad() {
+
+            cn.getPreparedStatement().setInt(1, this.id_venta);
+
+            cn.getPreparedStatement().setInt(2, this.id_producto);        return cantidad;
+
+            cn.getPreparedStatement().setInt(3, this.cantidad);
+
+            cn.getPreparedStatement().setDouble(4, this.precio_unitario);    public double getPrecio_unitario() {    }
+
+            cn.getPreparedStatement().setDouble(5, this.subtotal);
+
+            int resultado = cn.getPreparedStatement().executeUpdate();        return precio_unitario;
+
+            cn.cerrarConexion();
+
+            return resultado == 1;    }    public double getPrecio_unitario() {
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al insertar detalle de venta: " + e.getMessage());        return precio_unitario;
+
+            return false;
+
+        }    public void setPrecio_unitario(double precio_unitario) {    }
+
+    }
+
+}        this.precio_unitario = precio_unitario;
+
+    }    public double getSubtotal() {
+
+        return subtotal;
+
+    public double getSubtotal() {    }
+
+        return subtotal;}
+
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+    
+    public boolean agregar() {
+        String query = "INSERT INTO ventas_detalle (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
+        try {
+            cn.abrirConexion();
+            cn.setPreparedStatement(cn.getConexion().prepareStatement(query));
+            cn.getPreparedStatement().setInt(1, this.id_venta);
+            cn.getPreparedStatement().setInt(2, this.id_producto);
+            cn.getPreparedStatement().setInt(3, this.cantidad);
+            cn.getPreparedStatement().setDouble(4, this.precio_unitario);
+            cn.getPreparedStatement().setDouble(5, this.subtotal);
+            int resultado = cn.getPreparedStatement().executeUpdate();
+            cn.cerrarConexion();
+            return resultado == 1;
+        } catch (SQLException e) {
+            System.out.println("Error al insertar detalle de venta: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean existe(int idVenta, int idProducto) {
+        String query = "SELECT COUNT(*) as count FROM ventas_detalle WHERE id_venta = ? AND id_producto = ?";
+        try {
+            cn.abrirConexion();
+            cn.setPreparedStatement(cn.getConexion().prepareStatement(query));
+            cn.getPreparedStatement().setInt(1, idVenta);
+            cn.getPreparedStatement().setInt(2, idProducto);
+            ResultSet rs = cn.getPreparedStatement().executeQuery();
+            rs.next();
+            boolean existe = rs.getInt("count") > 0;
+            cn.cerrarConexion();
+            return existe;
+        } catch (SQLException e) {
+            System.out.println("Error al verificar existencia del detalle: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean actualizarCantidad(int idVenta, int idProducto, int cantidadAdicional) {
+        String query = "UPDATE ventas_detalle SET cantidad = cantidad + ?, subtotal = (cantidad + ?) * precio_unitario " +
+                      "WHERE id_venta = ? AND id_producto = ?";
+        try {
+            cn.abrirConexion();
+            cn.setPreparedStatement(cn.getConexion().prepareStatement(query));
+            cn.getPreparedStatement().setInt(1, cantidadAdicional);
+            cn.getPreparedStatement().setInt(2, cantidadAdicional);
+            cn.getPreparedStatement().setInt(3, idVenta);
+            cn.getPreparedStatement().setInt(4, idProducto);
+            int resultado = cn.getPreparedStatement().executeUpdate();
+            cn.cerrarConexion();
+            return resultado == 1;
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar cantidad del detalle: " + e.getMessage());
+            return false;
+        }
+    }
+}
