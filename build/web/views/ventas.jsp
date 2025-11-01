@@ -10,17 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
-        /* ? Ajusta el espacio para el menú lateral */
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .content-wrapper {
-            margin-left: 250px; /* ancho de tu sidebar */
-            padding: 30px;
-            min-height: 100vh;
-        }
-
+        body { background-color: #f8f9fa; }
+        .content-wrapper { margin-left: 250px; padding: 30px; min-height: 100vh; }
         .card {
             border: none;
             border-radius: 10px;
@@ -159,11 +150,9 @@
             <%
                 }
             %>
-                <% if ("editok".equals(request.getParameter("msg"))) { %>
-<div class="alert alert-info mt-3">
-     Venta actualizada correctamente.
         </div>
-<% } %>
+    </div>
+</div>
 
 <!-- ? MODAL DETALLE VENTA -->
 <div class="modal fade" id="detalleVentaModal" tabindex="-1" data-bs-backdrop="static">

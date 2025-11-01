@@ -168,9 +168,6 @@
                 </div>
 
                 <div class="text-end mt-4">
-                    <a href="${pageContext.request.contextPath}/FacturaPDF?idVenta=${param.idVenta}"
-   target="_blank" class="btn btn-danger">
-    <i class="bi bi-file-earmark-pdf"></i> Generar Factura PDF</a>
                     <button type="submit" class="btn btn-warning btn-lg">
                         <i class="bi bi-save"></i> Actualizar Venta
                     </button>

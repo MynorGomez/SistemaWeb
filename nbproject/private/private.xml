@@ -3,34 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/controlador/sr_login.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/modelo/Venta.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/utils/ConexionDB.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/controlador/ControladorVenta.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/compras.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/ventas_form.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/ventas.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/code/buscarCliente.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/ventas_editar.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/compras_detalles.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/controlador/sr_logout.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/WEB-INF/jwtFilter.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/detalleVenta.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/code/getExistencia.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/code/getVentaInfo.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/login.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/modelo/Cliente.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/modelo/Empleado.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/controlador/sr_cliente.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/clientes.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/controlador/sr_empleado.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/empleados.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/includes/menu.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/modelo/Menu.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/marcas.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/web/views/puestos.jsp</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/controlador/sr_marca.java</file>
-            <file>file:/C:/Users/J/Desktop/PROGRAMACION%202/Sistema/src/java/modelo/Marca.java</file>
+            <file>file:/C:/Users/J/Desktop/SistemaFinal/web/views/puestos.jsp</file>
+            <file>file:/C:/Users/J/Desktop/SistemaFinal/web/reporteResultados.jsp</file>
+            <file>file:/C:/Users/J/Desktop/SistemaFinal/web/views/ventas.jsp</file>
+            <file>file:/C:/Users/J/Desktop/SistemaFinal/web/reporteProductos.jsp</file>
+            <file>file:/C:/Users/J/Desktop/SistemaFinal/src/java/utils/ConexionDB.java</file>
+            <file>file:/C:/Users/J/Desktop/SistemaFinal/src/java/modelo/Puesto.java</file>
         </group>
     </open-files>
 </project-private>
