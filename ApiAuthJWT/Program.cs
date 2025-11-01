@@ -14,18 +14,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // ================================
-// 🔹 2️⃣ CORS (permite JSP en Tomcat)
+// 🔹 2️⃣ CORS (permite JSP y acceso externo)
 // ================================
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowJSP", policy =>
     {
-        policy.WithOrigins(
-            "http://localhost:8080",
-            "http://3.215.176.47:8080" // IP pública del servidor Tomcat
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+        policy
+            .WithOrigins(
+                "http://localhost:8080",          // Para Tomcat local
+                "http://18.118.129.255:8080"      // IP pública de tu servidor AWS
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+
+    // 🔸 Política general (para pruebas o Swagger)
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
 
@@ -36,7 +43,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Auth JWT", Version = "v1" });
 
-    // Configuración para probar JWT desde Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -62,7 +68,7 @@ builder.Services.AddSwaggerGen(c =>
 // ================================
 // 🔹 4️⃣ JWT CONFIG
 // ================================
-var key = Encoding.UTF8.GetBytes("CLAVE_SUPER_SECRETA_JWT_123456"); // cámbiala en producción
+var key = Encoding.UTF8.GetBytes("CLAVE_SUPER_SECRETA_JWT_123456");
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -71,7 +77,7 @@ builder.Services.AddAuthentication(opt =>
 })
 .AddJwtBearer(opt =>
 {
-    opt.RequireHttpsMetadata = false; // 🔸 para desarrollo (HTTP)
+    opt.RequireHttpsMetadata = false; // 🔸 Solo para desarrollo
     opt.SaveToken = true;
     opt.TokenValidationParameters = new TokenValidationParameters
     {
@@ -101,12 +107,13 @@ var app = builder.Build();
 // ================================
 // 🔹 7️⃣ MIDDLEWARES
 // ================================
-app.UseCors("AllowJSP");
+// Usa AllowAll durante pruebas para evitar CORS
+app.UseCors("AllowAll"); // ← cambiar a "AllowJSP" si quieres restringirlo luego
 app.UseAuthentication();
 app.UseAuthorization();
 
 // ================================
-// 🔹 8️⃣ SWAGGER UI (siempre disponible)
+// 🔹 8️⃣ SWAGGER UI
 // ================================
 app.UseSwagger();
 app.UseSwaggerUI();

@@ -173,7 +173,7 @@
     };
 
     try {
-      const res = await fetch("http://localhost:5119/api/auth/register", {
+      const res = await fetch("fetch("http://18.118.129.255:5119/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
