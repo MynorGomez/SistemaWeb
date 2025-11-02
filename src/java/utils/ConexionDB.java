@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConexionDB {
     private Connection conexion;
-    private final String url = "jdbc:mysql://localhost:3306/db_empresa";
-    private final String usuario = "root";
-    private final String clave = "Minato";
+ private final String url = "jdbc:mysql://127.0.0.1:3306/db_empresa";
+private final String usuario = "root";
+private final String clave = "Minato2025@";
     private final String driver = "com.mysql.cj.jdbc.Driver";
 
     public ConexionDB() {

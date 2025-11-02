@@ -3,47 +3,77 @@ package controlador;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import java.io.IOException;
-import java.sql.*;
-import utils.ConexionDB; // ✅ Usa tu clase de conexión existente
+import java.io.*;
+import java.net.*;
+import org.json.JSONObject;
 
 @WebServlet(name = "sr_login", urlPatterns = {"/sr_login"})
 public class sr_login extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String token = request.getParameter("token");
         String usuario = request.getParameter("usuario");
+        String clave = request.getParameter("clave");
 
-        // 🔍 Consultar nombre real desde la base de datos
-        String nombreCompleto = null;
+        // 🧩 URL del endpoint de login en tu API .NET
+        String apiUrl = "http://18.118.129.255:5119/api/Auth/login";
 
-        try (Connection con = new ConexionDB().getConexion();
-             PreparedStatement ps = con.prepareStatement(
-                 "SELECT nombre FROM usuarios WHERE usuario = ?")) {
+        // 📦 Crear el JSON de envío
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("usuario", usuario);
+        jsonBody.put("clave", clave);
 
-            ps.setString(1, usuario);
-            ResultSet rs = ps.executeQuery();
+        // ⚙️ Conexión HTTP a la API
+        HttpURLConnection con = (HttpURLConnection) new URL(apiUrl).openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
 
-            if (rs.next()) {
-                nombreCompleto = rs.getString("nombre");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        // 📨 Enviar JSON al API
+        try (OutputStream os = con.getOutputStream()) {
+            byte[] input = jsonBody.toString().getBytes("utf-8");
+            os.write(input, 0, input.length);
         }
 
-        // ✅ Crear o recuperar la sesión
-        HttpSession sesion = request.getSession();
-        sesion.setMaxInactiveInterval(30 * 60); // expira en 30 min
+        int code = con.getResponseCode();
 
-        // 🧩 Guardar datos del usuario
-        sesion.setAttribute("jwt", token);
-        sesion.setAttribute("usuario", usuario);
-        sesion.setAttribute("nombre", nombreCompleto != null ? nombreCompleto : usuario);
+        if (code == 200) {
+            // 📥 Leer respuesta del API
+            StringBuilder responseStr = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    responseStr.append(responseLine.trim());
+                }
+            }
 
-        // 🔁 Responder OK al cliente
-        response.setStatus(HttpServletResponse.SC_OK);
+            // 🔍 Convertir respuesta a JSON
+            JSONObject jsonResponse = new JSONObject(responseStr.toString());
+
+            // ✅ Extraer datos
+            String token = jsonResponse.getString("token");
+            String nombre = jsonResponse.optString("nombre", usuario);
+            String rol = jsonResponse.optString("rol", "empleado");
+
+            // 🧠 Crear sesión
+            HttpSession sesion = request.getSession();
+            sesion.setAttribute("jwt", token);
+            sesion.setAttribute("usuario", usuario);
+            sesion.setAttribute("nombre", nombre);
+            sesion.setAttribute("rol", rol);
+            sesion.setMaxInactiveInterval(30 * 60);
+
+            // 🔁 Redirigir al panel principal
+            response.sendRedirect("views/index.jsp");
+
+        } else {
+            // ❌ Error (usuario o contraseña incorrectos)
+            request.setAttribute("error", "Credenciales inválidas o servidor no disponible.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
     }
 }
