@@ -986,6 +986,9 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.json-20210307.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.json-simple-1.1.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.itextpdf-5.5.13.3.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.mysql-connector-j-8.1.0.jar}" todir="${build.web.dir}//"/>
+        <copyfiles files="${file.reference.itextpdf-5.5.13.3.jar}" todir="${build.web.dir}//"/>
+        <copyfiles files="${file.reference.json-20210307.jar}" todir="${build.web.dir}//"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
@@ -994,6 +997,9 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.json-20210307.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.json-simple-1.1.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.itextpdf-5.5.13.3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.mysql-connector-j-8.1.0.jar}" todir="${build.web.dir}//"/>
+        <copyfiles files="${file.reference.itextpdf-5.5.13.3.jar}" todir="${build.web.dir}//"/>
+        <copyfiles files="${file.reference.json-20210307.jar}" todir="${build.web.dir}//"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
