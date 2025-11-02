@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace ApiAuthJWT.Controllers
 {
@@ -21,43 +19,44 @@ namespace ApiAuthJWT.Controllers
 
         // ✅ POST: /api/auth/login
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+public IActionResult Login([FromBody] LoginRequest request)
+{
+    try
+    {
+        using var con = new MySqlConnection(_config.GetConnectionString("MySql"));
+        con.Open();
+
+        using var cmd = new MySqlCommand(
+            "SELECT id_usuario, usuario, password, nombre, rol FROM usuarios WHERE usuario = @usuario", con);
+        cmd.Parameters.AddWithValue("@usuario", request.Usuario);
+
+        using var reader = cmd.ExecuteReader();
+        if (!reader.Read())
+            return Unauthorized(new { message = "Usuario no encontrado" });
+
+        string storedPassword = reader.GetString("password");
+        string nombre = reader.GetString("nombre");
+        string rol = reader.GetString("rol");
+
+        if (storedPassword != request.Clave)
+            return Unauthorized(new { message = "Contraseña incorrecta" });
+
+        var token = GenerateJwtToken(request.Usuario, nombre, rol);
+
+        // ✅ Código 200 OK explícito
+        return StatusCode(200, new
         {
-            try
-            {
-                using var con = new MySqlConnection(_config.GetConnectionString("MySql"));
-                con.Open();
-
-                using var cmd = new MySqlCommand(
-                    "SELECT id_usuario, usuario, password, nombre, rol FROM usuarios WHERE usuario = @usuario", con);
-                cmd.Parameters.AddWithValue("@usuario", request.Usuario);
-
-                using var reader = cmd.ExecuteReader();
-                if (!reader.Read())
-                    return Unauthorized(new { message = "Usuario no encontrado" });
-
-                string storedPassword = reader.GetString("password");
-                string nombre = reader.GetString("nombre");
-                string rol = reader.GetString("rol");
-
-                // ⚙️ Comparar contraseñas (sin cifrado por ahora)
-                if (storedPassword != request.Clave)
-                    return Unauthorized(new { message = "Contraseña incorrecta" });
-
-                var token = GenerateJwtToken(request.Usuario, nombre, rol);
-                return Ok(new
-                {
-                    usuario = request.Usuario,
-                    nombre,
-                    rol,
-                    token
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error en servidor", error = ex.Message });
-            }
-        }
+            usuario = request.Usuario,
+            nombre,
+            rol,
+            token
+        });
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { message = "Error en servidor", error = ex.Message });
+    }
+}
 
         // ✅ POST: /api/auth/register
         [HttpPost("register")]
@@ -107,12 +106,10 @@ namespace ApiAuthJWT.Controllers
             }
         }
 
-        // 🔑 Generar JWT
+        // 🔑 Generar JWT sin firma (alg = none)
         private string GenerateJwtToken(string usuario, string nombre, string rol)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
+            // 🧩 Datos del payload (claims)
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, usuario),
@@ -121,31 +118,32 @@ namespace ApiAuthJWT.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
+            // 🪶 Crear token sin firma (alg = none)
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(2),
-                signingCredentials: creds
+                signingCredentials: null // Sin credenciales (sin algoritmo ni clave)
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-    }
 
-    // 📦 Modelos de entrada
-    public class LoginRequest
-    {
-        public string Usuario { get; set; }
-        public string Clave { get; set; }
-    }
+        // 📦 Modelos de entrada
+        public class LoginRequest
+        {
+            public string Usuario { get; set; }
+            public string Clave { get; set; }
+        }
 
-    public class RegisterRequest
-    {
-        public string Usuario { get; set; }
-        public string Clave { get; set; }
-        public string Nombre { get; set; }
-        public string Rol { get; set; }
-        public string Email { get; set; } // opcional, por si lo agregas en BD
+        public class RegisterRequest
+        {
+            public string Usuario { get; set; }
+            public string Clave { get; set; }
+            public string Nombre { get; set; }
+            public string Rol { get; set; }
+            public string Email { get; set; } // opcional
+        }
     }
 }
