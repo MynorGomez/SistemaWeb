@@ -9,8 +9,8 @@ public class ConexionDB {
 
     // ✅ URL con parámetros recomendados
     private final String url = "jdbc:mysql://127.0.0.1:3306/db_empresa?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-    private final String usuario = "root";
-    private final String clave = "Minato2025@";
+    private final String usuario = "web_user";
+    private final String clave = "Web2025@";
     private final String driver = "com.mysql.cj.jdbc.Driver";
 
     public ConexionDB() {
